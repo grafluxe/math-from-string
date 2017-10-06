@@ -44,7 +44,7 @@ Script tag:
 
 - This project is lightweight and dependency free.
 - The source code is written in ES6 and transpiled with Babel.
-- If you need to create documentation for local use, run `npm run doc`. Otherwise, visit the online [docs](http://grafluxe.com/o/doc/math-from-string/math-from-string.html).
+- If you need to create documentation for local use, run `npm run doc`. Otherwise, visit the online [docs](http://grafluxe.com/o/doc/math-from-string/global.html#mathFromString).
 
 ## Samples
 
@@ -65,7 +65,7 @@ mathfromString("-10+-2");
 ```
 -
 
-See the full documentation [here](http://grafluxe.com/o/doc/math-from-string/math-from-string.html).
+See the full documentation [here](http://grafluxe.com/o/doc/math-from-string/global.html#mathFromString).
 
 ## License
 
