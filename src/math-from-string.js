@@ -4,8 +4,6 @@
  * @license MIT
  */
 
-// jshint esversion: 6, node: true
-
 /**
  * Parses a string as a mathematical expression. Supports addition, subtraction, division,
  * and multiplication.
@@ -19,7 +17,7 @@ function mathFromString(str) {
     throw new Error("Spaces and letters are not allowed.");
   }
 
-  if (/[+\-*\/]{3,}/.test(str)) {
+  if (/[+\-*/]{3,}/.test(str)) {
     throw new Error("Your string has two consecutive operators.");
   }
 
