@@ -6,13 +6,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
  * @author Leandro Silva
  * @copyright 2014, 2017 Leandro Silva (http://grafluxe.com)
  * @license MIT
- */
-
-// jshint esversion: 6, node: true
-
-/**
- * Parses a string as a mathematical expression. Supports addition, subtraction, division,
- * and multiplication.
+ *
+ * @desc Parses a string as a mathematical expression. Supports addition,
+ *       subtraction, division, and multiplication.
  * @throws	{Error} Spaces and letters are not allowed.
  * @throws	{Error} Your string has two consecutive operators.
  * @param   {String} str The string to parse.
@@ -23,7 +19,7 @@ function mathFromString(str) {
     throw new Error("Spaces and letters are not allowed.");
   }
 
-  if (/[+\-*\/]{3,}/.test(str)) {
+  if (/[+\-*/]{3,}/.test(str)) {
     throw new Error("Your string has two consecutive operators.");
   }
 
