@@ -2,11 +2,9 @@
  * @author Leandro Silva
  * @copyright 2014, 2017 Leandro Silva (http://grafluxe.com)
  * @license MIT
- */
-
-/**
- * Parses a string as a mathematical expression. Supports addition, subtraction, division,
- * and multiplication.
+ *
+ * @desc Parses a string as a mathematical expression. Supports addition,
+ *       subtraction, division, and multiplication.
  * @throws	{Error} Spaces and letters are not allowed.
  * @throws	{Error} Your string has two consecutive operators.
  * @param   {String} str The string to parse.
