@@ -5,7 +5,7 @@
   "scripts": {
     "prepare": "npm run dist -s",
     "dist": "npm run lint -s && npm run babel -s && npm run minify -s && npm run preamble -s",
-    "lint": "jshint src/",
+    "lint": "eslint src/",
     "babel": "babel src/ -o dist/math-from-string.js",
     "minify": "uglifyjs dist/math-from-string.js -mco dist/math-from-string.min.js",
     "preamble": "preamble -p \"/*github.com/Grafluxe/math-from-string*/\n\" -o ./dist/math-from-string.min.js",
@@ -35,10 +35,10 @@
   "devDependencies": {
     "babel-cli": "^6.18.0",
     "babel-preset-es2015": "^6.18.0",
-    "boxy-jsdoc-template": "^1.0.0",
+    "boxy-jsdoc-template": "^2.0.1",
+    "eslint": "^4.12.1",
     "jsdoc": "^3.4.3",
-    "jshint": "^2.9.4",
     "preamble-cli": "^1.0.0",
-    "uglify-js": "^3.1.3"
+    "uglify-js": "^3.2.0"
   }
 }
