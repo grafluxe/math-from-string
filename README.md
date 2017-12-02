@@ -18,10 +18,6 @@ Minified version:
 let mathfromString = require("math-from-string/dist/math-from-string.min");
 ```
 
-[Visit package on npm](https://www.npmjs.com/package/math-from-string)
-
-[![npm](https://nodei.co/npm/math-from-string.png)](https://www.npmjs.com/package/math-from-string)
-
 ### Browser
 
 ```
@@ -40,11 +36,14 @@ Script tag:
 <script src="node_modules/math-from-string/dist/math-from-string.min.js"></script>
 ```
 
+## Documentation
+
+See the [documentation](http://grafluxe.com/o/doc/math-from-string/global.html).
+
 ## Notes
 
 - This project is lightweight and dependency free.
 - The source code is written in ES6 and transpiled with Babel.
-- If you need to create documentation for local use, run `npm run doc`. Otherwise, visit the online [docs](http://grafluxe.com/o/doc/math-from-string/global.html#mathFromString).
 
 ## Samples
 
@@ -63,9 +62,6 @@ mathfromString("5-3*2");
 mathfromString("-10+-2");
 // -12
 ```
--
-
-See the full documentation [here](http://grafluxe.com/o/doc/math-from-string/global.html#mathFromString).
 
 ## License
 
