@@ -14,7 +14,7 @@ let expectedStr = /^[\d-(.][\d+\-*/().]+[\d)]$/,
 
 /**
  * @desc Parses a string as a mathematical expression. Supports addition,
- * subtraction, division, and multiplication.
+ * subtraction, division, multiplication, and exponentiation.
  * @throws	{Error}  The string at/near "<value>" is malformed.
  * @throws	{Error}  The string at/near "<value>" has a malformed operator.
  * @param   {String} str The string to parse.
@@ -75,6 +75,8 @@ function _doMath(match, num1, operator, num2) {
       return Number(num1) + Number(num2);
     case "-":
       return Number(num1) - Number(num2);
+    case "**":
+      return num1 ** num2;
   }
 }
 
