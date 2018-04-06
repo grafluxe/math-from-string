@@ -1,9 +1,3 @@
-/**
- * @author Leandro Silva
- * @copyright 2014, 2017-2018 Leandro Silva (http://grafluxe.com)
- * @license MIT
- */
-
 let expectedStr = /^[\d-(.][\d+\-*/().]+[\d)]$/,
     unexpectedOps = /(?!\*\*)[+\-*/][+/*]\d|[+\-*/]{3,}/,
     parans = /\(([^(]+?)\)/,
@@ -13,10 +7,14 @@ let expectedStr = /^[\d-(.][\d+\-*/().]+[\d)]$/,
     addSub = /(-?[\d.]+)([+-])(-?[\d.]+)/;
 
 /**
+ * @author Leandro Silva
+ * @copyright 2014, 2017-2018 Leandro Silva (http://grafluxe.com)
+ * @license MIT
+ *
  * @desc Parses a string as a mathematical expression. Supports addition,
  * subtraction, division, multiplication, and exponentiation.
- * @throws	{Error}  The string at/near "<value>" is malformed.
- * @throws	{Error}  The string at/near "<value>" has a malformed operator.
+ * @throws	{Error}  The string at/near "&lt;value>" is malformed.
+ * @throws	{Error}  The string at/near "&lt;value>" has a malformed operator.
  * @param   {String} str The string to parse.
  * @returns {Number} The end total.
  */
@@ -50,7 +48,7 @@ function mathFromString(str) {
 /**
  * Parses math.
  * @private
- * @throws	{Error}  The value "<number>" is not a valid number.
+ * @throws	{Error}  The value "&lt;number>" is not a valid number.
  * @param   {String} match    The matched string.
  * @param   {Number} num1     The first number of the equation.
  * @param   {String} operator The operator.
