@@ -1,42 +1,53 @@
 /**
  * @author Leandro Silva
- * @copyright 2014, 2017 Leandro Silva (http://grafluxe.com)
+ * @copyright 2014, 2017-2018 Leandro Silva (http://grafluxe.com)
  * @license MIT
  *
  * @desc Parses a string as a mathematical expression. Supports addition,
  *       subtraction, division, and multiplication.
- * @throws	{Error} Spaces and letters are not allowed.
- * @throws	{Error} Your string has two consecutive operators.
+ * @throws  {Error} Spaces and letters are not allowed.
+ * @throws  {Error} Your string has two consecutive operators.
+ * @throws  {Error} Your string is malformed.
  * @param   {String} str The string to parse.
  * @returns {Number} The end value.
  */
+
+let notAllowed = /[A-Za-z\s]/,
+    consecutiveOps = /[+\-*/]{3,}/,
+    malformedStr = /[\\*+-]$|^[\\*+]/,
+    parens = /\(([^(]+?)\)/,
+    hasMulDiv = /\/|\*/,
+    mulDiv = /(-?\d+)([/*])(-?\d+)/,
+    hasAddSub = /(?!^-)-|\+/,
+    addSub = /(-?\d+)([+-])(-?\d+)/;
+
 function mathFromString(str) {
-  if (/[A-Za-z\s]/.test(str)) {
+  if (notAllowed.test(str)) {
     throw new Error("Spaces and letters are not allowed.");
   }
 
-  if (/[+\-*/]{3,}/.test(str)) {
+  if (consecutiveOps.test(str)) {
     throw new Error("Your string has two consecutive operators.");
   }
 
-  if (/[\\*+-]$|^[\\*+]/.test(str)) {
+  if (malformedStr.test(str)) {
     throw new Error("Your string is malformed.");
   }
 
   // Do math inside parentheses first
-  while (/\(/.test(str)) {
-    let nested = str.match(/\(([^(]+?)\)/)[1];
+  while (str.indexOf("(") > -1) {
+    let nested = str.match(parens)[1];
 
     str = str.replace(`(${nested})`, mathFromString(nested));
   }
 
   // Division and multiplication operators are done first
-  while (/\/|\*/.test(str)) {
-    str = str.replace(/(-?\d+)([/*])(-?\d+)/, _doMath);
+  while (hasMulDiv.test(str)) {
+    str = str.replace(mulDiv, _doMath);
   }
 
-  while (/(?!^-)-|\+/.test(str)) {
-    str = str.replace(/(-?\d+)([+-])(-?\d+)/, _doMath);
+  while (hasAddSub.test(str)) {
+    str = str.replace(addSub, _doMath);
   }
 
   return str;
