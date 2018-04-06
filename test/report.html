@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="jasmineResults">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.3/angular-material.min.css">
+    <style>
+        .status {
+            width: 85px;
+            padding: 7px;
+            border-radius: 3px;
+            text-align: center;
+        }
+
+        .failed .status {
+            background-color: rgb(255, 87, 34);
+        }
+
+        .passed .status {
+            background-color: rgb(76, 175, 80);
+        }
+
+        .pending .status {
+            background-color: rgb(255, 255, 0);
+        }
+
+
+        /* stack traces */
+        pre {
+            margin:0;
+        }
+
+        .stack.highlight {
+            background-color: yellow;
+        }
+
+    </style>
+</head>
+<body ng-controller="ResultsCtrl">
+
+<div ng-cloak layout="column">
+    <md-toolbar ng-class="{'md-warn': results.counts.failed}">
+        <div class="md-toolbar-tools">
+            <h2 flex md-truncate>Results <small ng-if="runTime"> - executed in {{runTime}} ms</small></h2>
+            <h6>
+                <span ng-if="results.counts.passed">Passed: {{results.counts.passed}}</span>
+                <br ng-if="results.counts.passed" />
+
+                <span ng-if="results.counts.pending">Pending: {{results.counts.pending}}</span>
+                <br ng-if="results.counts.pending" />
+
+                <span ng-if="results.counts.failed">Failed: {{results.counts.failed}}</span>
+            </h6>
+        </div>
+    </md-toolbar>
+    <md-content flex>
+        <md-list>
+            <md-list-item ng-class="result.status" ng-repeat="result in results.sequence" ng-click="showDetail(result)">
+                <div layout="row" flex layout-padding>
+                    <div flex="none">
+                        <div class="status">{{result.status}}</div>
+                    </div>
+                    <div flex>
+                        <span>{{result.prefix}}</span><strong>{{result.description}}</strong>
+                        <div ng-if="result.pendingReason != ''">
+                            <small>{{result.pendingReason}}</small>
+                        </div>
+                        <div ng-repeat="failure in result.failedExpectations" ng-show="failure.hasSuspectLine">
+                            <small>
+                                <span>{{failure.message}}</span>
+                                <div ng-if="results.options.showSuspectLine">
+                                    <pre>{{failure.suspectLine}}</pre>
+                                </div>
+                            </small>
+                        </div>
+                    </div>
+                    <div flex="none" style="width: 100px">
+                        <small>{{result.duration}} ms</small>
+                    </div>
+                </div>
+                <md-divider inset></md-divider>
+            </md-list-item>
+        </md-list>
+    </md-content>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.3/angular-material.js"></script>
+
+<script>
+    angular.module('jasmineResults', ['ngMaterial']).config(function ($mdThemingProvider) {
+        $mdThemingProvider.theme('default').primaryPalette('green').accentPalette('yellow');
+    }).controller('ResultsCtrl', function ($scope, $mdDialog, results) {
+
+        var classes = {
+            'passed': 'md-primary',
+            'pending': 'md-accent',
+            'failed': 'md-warn'
+        };
+
+        $scope.showDetail = function (item) {
+            $scope.activeItem = item;
+            $mdDialog.show({
+                controller: function () {
+                },
+                scope: $scope.$new(false, $scope),
+                templateUrl: 'dialog.html',
+                parent: angular.element(document.body),
+                clickOutsideToClose: true
+            })
+        };
+
+        $scope.results = results;
+        $scope.runTime = new Date(results.timer.jasmineDone) - new Date(results.timer.jasmineStart);
+
+        $scope.getCssClass = function(item){
+            return classes[item.status];
+        };
+
+    }).constant('results', {
+    "options": {
+        "writeReportEachSpec": true,
+        "showSuspectLine": true,
+        "highlightSuspectLine": true,
+        "path": "./test"
+    },
+    "timer": {
+        "jasmineStart": "2018-04-06T20:46:02.710Z",
+        "jasmineDone": "2018-04-06T20:46:02.744Z"
+    },
+    "counts": {
+        "passed": 20
+    },
+    "sequence": [
+        {
+            "id": "spec0",
+            "description": "123.678+0.01 = 123.688",
+            "fullName": "Equation should pass as 123.678+0.01 = 123.688",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBe",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "status": "passed",
+            "stoped": "2018-04-06T20:46:02.714Z",
+            "prefix": "Equation should pass as ",
+            "duration": null
+        },
+        {
+            "id": "spec1",
+            "description": "123.678+0.1 = 123.77799999999999",
+            "fullName": "Equation should pass as 123.678+0.1 = 123.77799999999999",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBe",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "status": "passed",
+            "stoped": "2018-04-06T20:46:02.716Z",
+            "prefix": "Equation should pass as ",
+            "duration": null
+        },
+        {
+            "id": "spec2",
+            "description": "(2+8)*2+(100.34-10+(2+5.4)) = 117.74000000000001",
+            "fullName": "Equation should pass as (2+8)*2+(100.34-10+(2+5.4)) = 117.74000000000001",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBe",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "status": "passed",
+            "stoped": "2018-04-06T20:46:02.716Z",
+            "prefix": "Equation should pass as ",
+            "duration": null
+        },
+        {
+            "id": "spec3",
+            "description": "(2*2)*3*(4*4) = 192",
+            "fullName": "Equation should pass as (2*2)*3*(4*4) = 192",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBe",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "status": "passed",
+            "stoped": "2018-04-06T20:46:02.719Z",
+            "prefix": "Equation should pass as ",
+            "duration": null
+        },
+        {
+            "id": "spec4",
+            "description": "(2*8)*2*(100.34*10*(2*5.4)) = 346775.04000000004",
+            "fullName": "Equation should pass as (2*8)*2*(100.34*10*(2*5.4)) = 346775.04000000004",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBe",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "status": "passed",
+            "stoped": "2018-04-06T20:46:02.720Z",
+            "prefix": "Equation should pass as ",
+            "duration": null
+        },
+        {
+            "id": "spec5",
+            "description": "2*-3 = -6.0",
+            "fullName": "Equation should pass as 2*-3 = -6.0",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBe",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "status": "passed",
+            "stoped": "2018-04-06T20:46:02.720Z",
+            "prefix": "Equation should pass as ",
+            "duration": null
+        },
+        {
+            "id": "spec6",
+            "description": "2**3 = 8.0",
+            "fullName": "Equation should pass as 2**3 = 8.0",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBe",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "status": "passed",
+            "stoped": "2018-04-06T20:46:02.723Z",
+            "prefix": "Equation should pass as ",
+            "duration": null
+        },
+        {
+            "id": "spec7",
+            "description": "(2+8)*2 = 20.0",
+            "fullName": "Equation should pass as (2+8)*2 = 20.0",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBe",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "status": "passed",
+            "stoped": "2018-04-06T20:46:02.724Z",
+            "prefix": "Equation should pass as ",
+            "duration": null
+        },
+        {
+            "id": "spec8",
+            "description": "-2+8 = 6.0",
+            "fullName": "Equation should pass as -2+8 = 6.0",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBe",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "status": "passed",
+            "stoped": "2018-04-06T20:46:02.725Z",
+            "prefix": "Equation should pass as ",
+            "duration": null
+        },
+        {
+            "id": "spec9",
+            "description": "2+-8 = -6.0",
+            "fullName": "Equation should pass as 2+-8 = -6.0",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBe",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "status": "passed",
+            "stoped": "2018-04-06T20:46:02.727Z",
+            "prefix": "Equation should pass as ",
+            "duration": null
+        },
+        {
+            "id": "spec10",
+            "description": "-2+-8 = -10.0",
+            "fullName": "Equation should pass as -2+-8 = -10.0",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toBe",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "status": "passed",
+            "stoped": "2018-04-06T20:46:02.728Z",
+            "prefix": "Equation should pass as ",
+            "duration": null
+        },
+        {
+            "id": "spec11",
+            "description": "(2+8)*2+(100.3.4-10+(2+5.4)) is an invalid equation",
+            "fullName": "Equation should fail as (2+8)*2+(100.3.4-10+(2+5.4)) is an invalid equation",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toThrow",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "status": "passed",
+            "stoped": "2018-04-06T20:46:02.730Z",
+            "prefix": "Equation should fail as ",
+            "duration": null
+        },
+        {
+            "id": "spec12",
+            "description": "2+8.0.0 is an invalid equation",
+            "fullName": "Equation should fail as 2+8.0.0 is an invalid equation",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toThrow",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "status": "passed",
+            "stoped": "2018-04-06T20:46:02.733Z",
+            "prefix": "Equation should fail as ",
+            "duration": null
+        },
+        {
+            "id": "spec13",
+            "description": "+2+8 is an invalid equation",
+            "fullName": "Equation should fail as +2+8 is an invalid equation",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toThrow",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "status": "passed",
+            "stoped": "2018-04-06T20:46:02.734Z",
+            "prefix": "Equation should fail as ",
+            "duration": null
+        },
+        {
+            "id": "spec14",
+            "description": "/2+8 is an invalid equation",
+            "fullName": "Equation should fail as /2+8 is an invalid equation",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toThrow",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "status": "passed",
+            "stoped": "2018-04-06T20:46:02.734Z",
+            "prefix": "Equation should fail as ",
+            "duration": null
+        },
+        {
+            "id": "spec15",
+            "description": "*2+8 is an invalid equation",
+            "fullName": "Equation should fail as *2+8 is an invalid equation",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toThrow",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "status": "passed",
+            "stoped": "2018-04-06T20:46:02.737Z",
+            "prefix": "Equation should fail as ",
+            "duration": null
+        },
+        {
+            "id": "spec16",
+            "description": "2++8 is an invalid equation",
+            "fullName": "Equation should fail as 2++8 is an invalid equation",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toThrow",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "status": "passed",
+            "stoped": "2018-04-06T20:46:02.738Z",
+            "prefix": "Equation should fail as ",
+            "duration": null
+        },
+        {
+            "id": "spec17",
+            "description": "2+/8 is an invalid equation",
+            "fullName": "Equation should fail as 2+/8 is an invalid equation",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toThrow",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "status": "passed",
+            "stoped": "2018-04-06T20:46:02.738Z",
+            "prefix": "Equation should fail as ",
+            "duration": null
+        },
+        {
+            "id": "spec18",
+            "description": "2+*8 is an invalid equation",
+            "fullName": "Equation should fail as 2+*8 is an invalid equation",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toThrow",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "status": "passed",
+            "stoped": "2018-04-06T20:46:02.741Z",
+            "prefix": "Equation should fail as ",
+            "duration": null
+        },
+        {
+            "id": "spec19",
+            "description": "1+(1) is an invalid equation",
+            "fullName": "Equation should fail as 1+(1) is an invalid equation",
+            "failedExpectations": [],
+            "passedExpectations": [
+                {
+                    "matcherName": "toThrow",
+                    "message": "Passed.",
+                    "stack": "",
+                    "passed": true
+                }
+            ],
+            "deprecationWarnings": [],
+            "pendingReason": "",
+            "status": "passed",
+            "stoped": "2018-04-06T20:46:02.743Z",
+            "prefix": "Equation should fail as ",
+            "duration": null
+        }
+    ]
+});
+</script>
+
+<script type="text/ng-template" id="dialog.html">
+    <md-dialog aria-label="" flex="90">
+        <md-toolbar ng-class="getCssClass(activeItem)">
+            <div layout="row" layout-padding class="md-toolbar-tools">
+                <div flex="none">
+                    <h1>Test Information:</h1>
+                </div>
+                <div flex>
+                    <small>
+                        <span>{{ activeItem.prefix }}</span>
+                        <strong>{{ activeItem.description }}</strong>
+                    </small>
+                </div>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+            <md-subheader ng-if="activeItem.failedExpectations.length > 0">Stack Traces</md-subheader>
+            <md-content>
+                <div flex layout="column" layout-padding ng-repeat="failure in activeItem.failedExpectations">
+                    <div flex>
+                        <p>{{failure.message}}</p>
+                        <small>
+                            <pre class="stack" ng-class="{'highlight': (results.options.highlightSuspectLine && line === failure.suspectLine) }" ng-repeat="line in failure.stack.split('\n')">{{line}}</pre>
+                        </small>
+                    </div>
+                </div>
+            </md-content>
+            <md-subheader ng-if="activeItem.passedExpectations.length > 0">Passed Expectations</md-subheader>
+            <pre ng-repeat="pass in activeItem.passedExpectations">{{pass | json}}</pre>
+        </md-dialog-content>
+    </md-dialog>
+</script>
+
+</body>
+</html>
