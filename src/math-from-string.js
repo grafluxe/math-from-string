@@ -51,6 +51,7 @@ function mathFromString(str) {
 /**
  * Performs math for the parseMath method.
  * @private
+ * @throws	{Error}  The value "<number>" is not a valid number.
  * @param   {String} match    The matched string.
  * @param   {Number} num1     The first number of the equation.
  * @param   {String} operator The operator.
@@ -58,6 +59,14 @@ function mathFromString(str) {
  * @returns {Number} The end total.
  */
 function _doMath(match, num1, operator, num2) {
+  if (isNaN(num1)) {
+    throw new Error(`The value "${num1}" is not a valid number.`);
+  }
+
+  if (isNaN(num2)) {
+    throw new Error(`The value "${num2}" is not a valid number.`);
+  }
+
   switch (operator) {
     case "/":
       return Number(num1) / Number(num2);
