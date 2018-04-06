@@ -6,7 +6,7 @@
 
 let expectedStr = /^[\d-(.][\d+\-*/().]+[\d)]$/,
     unexpectedOps = /(?!\*\*)[+\-*/][+/*]\d|[+\-*/]{3,}/,
-    parens = /\(([^(]+?)\)/,
+    parans = /\(([^(]+?)\)/,
     hasMulDiv = /[/*]/,
     mulDiv = /(-?[\d.]+)([/*]*?)(-?[\d.]+)/,
     hasAddSub = /(?!^-)-|\+/,
@@ -31,9 +31,8 @@ function mathFromString(str) {
 
   // Do math inside parentheses first
   while (str.indexOf("(") > -1) {
-    let nested = str.match(parens)[1];
-
-    str = str.replace(`(${nested})`, mathFromString(nested));
+    let nested = str.match(parans);
+    str = str.replace(nested[0], mathFromString(nested[1]));
   }
 
   // Division and multiplication operators are done first
@@ -45,18 +44,18 @@ function mathFromString(str) {
     str = str.replace(addSub, _doMath);
   }
 
-  return str;
+  return Number(str);
 }
 
 /**
- * Performs math for the parseMath method.
+ * Parses math.
  * @private
  * @throws	{Error}  The value "<number>" is not a valid number.
  * @param   {String} match    The matched string.
  * @param   {Number} num1     The first number of the equation.
  * @param   {String} operator The operator.
  * @param   {Number} num2     The second number of the equation.
- * @returns {Number} The end total.
+ * @returns {Number} The equations value.
  */
 function _doMath(match, num1, operator, num2) {
   if (isNaN(num1)) {
