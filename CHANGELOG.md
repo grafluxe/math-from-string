@@ -1,7 +1,9 @@
 # Changelog
 
-## Latest (2018-04-06)
+## 2.0.0 (2018-04-06)
 
+- [Update README](https://github.com/Grafluxe/math-from-string/commit/32dbdfa)
+- [Add CHANGELOG](https://github.com/Grafluxe/math-from-string/commit/72a739a)
 - [Add babel exponent transformer](https://github.com/Grafluxe/math-from-string/commit/137448e)
 - [Update dependencies](https://github.com/Grafluxe/math-from-string/commit/f2ab7a2)
 - [Update inline docs](https://github.com/Grafluxe/math-from-string/commit/9186e01)

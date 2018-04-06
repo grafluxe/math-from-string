@@ -2,60 +2,72 @@
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
+var expectedStr = /^[\d-(.][\d+\-*/().]+[\d)]$/,
+    unexpectedOps = /(?!\*\*)[+\-*/][+/*]\d|[+\-*/]{3,}/,
+    parans = /\(([^(]+?)\)/,
+    hasMulDiv = /[/*]/,
+    mulDiv = /(-?[\d.]+)([/*]*?)(-?[\d.]+)/,
+    hasAddSub = /(?!^-)-|\+/,
+    addSub = /(-?[\d.]+)([+-])(-?[\d.]+)/;
+
 /**
  * @author Leandro Silva
- * @copyright 2014, 2017 Leandro Silva (http://grafluxe.com)
+ * @copyright 2014, 2017-2018 Leandro Silva (http://grafluxe.com)
  * @license MIT
  *
  * @desc Parses a string as a mathematical expression. Supports addition,
- *       subtraction, division, and multiplication.
- * @throws	{Error} Spaces and letters are not allowed.
- * @throws	{Error} Your string has two consecutive operators.
+ * subtraction, division, multiplication, and exponentiation.
+ * @throws	{Error}  The string at/near "&lt;value>" is malformed.
+ * @throws	{Error}  The string at/near "&lt;value>" has a malformed operator.
  * @param   {String} str The string to parse.
- * @returns {Number} The end value.
+ * @returns {Number} The end total.
  */
 function mathFromString(str) {
-  if (/[A-Za-z\s]/.test(str)) {
-    throw new Error("Spaces and letters are not allowed.");
+  if (!expectedStr.test(str)) {
+    throw new Error("The string at/near \"" + str + "\" is malformed.");
   }
 
-  if (/[+\-*/]{3,}/.test(str)) {
-    throw new Error("Your string has two consecutive operators.");
-  }
-
-  if (/[\\*+-]$|^[\\*+]/.test(str)) {
-    throw new Error("Your string is malformed.");
+  if (unexpectedOps.test(str)) {
+    throw new Error("The string at/near \"" + str + "\" has a malformed operator.");
   }
 
   // Do math inside parentheses first
-  while (/\(/.test(str)) {
-    var nested = str.match(/\(([^(]+?)\)/)[1];
-
-    str = str.replace("(" + nested + ")", mathFromString(nested));
+  while (str.indexOf("(") > -1) {
+    var nested = str.match(parans);
+    str = str.replace(nested[0], mathFromString(nested[1]));
   }
 
   // Division and multiplication operators are done first
-  while (/\/|\*/.test(str)) {
-    str = str.replace(/(-?\d+)([/*])(-?\d+)/, _doMath);
+  while (hasMulDiv.test(str)) {
+    str = str.replace(mulDiv, _doMath);
   }
 
-  while (/(?!^-)-|\+/.test(str)) {
-    str = str.replace(/(-?\d+)([+-])(-?\d+)/, _doMath);
+  while (hasAddSub.test(str)) {
+    str = str.replace(addSub, _doMath);
   }
 
-  return str;
+  return Number(str);
 }
 
 /**
- * Performs math for the parseMath method.
+ * Parses math.
  * @private
+ * @throws	{Error}  The value "&lt;number>" is not a valid number.
  * @param   {String} match    The matched string.
  * @param   {Number} num1     The first number of the equation.
  * @param   {String} operator The operator.
  * @param   {Number} num2     The second number of the equation.
- * @returns {Number} The end total.
+ * @returns {Number} The equations value.
  */
 function _doMath(match, num1, operator, num2) {
+  if (isNaN(num1)) {
+    throw new Error("The value \"" + num1 + "\" is not a valid number.");
+  }
+
+  if (isNaN(num2)) {
+    throw new Error("The value \"" + num2 + "\" is not a valid number.");
+  }
+
   switch (operator) {
     case "/":
       return Number(num1) / Number(num2);
@@ -65,6 +77,8 @@ function _doMath(match, num1, operator, num2) {
       return Number(num1) + Number(num2);
     case "-":
       return Number(num1) - Number(num2);
+    case "**":
+      return Math.pow(num1, num2);
   }
 }
 
