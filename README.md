@@ -1,6 +1,6 @@
 # math-from-string
 
-Parses strings as mathematical expressions. This module supports both Node and browser use.
+Parses a string as a mathematical expression. Supports addition, subtraction, division, multiplication, and exponentiation.
 
 ## Usage
 
@@ -36,10 +36,6 @@ Script tag:
 <script src="node_modules/math-from-string/dist/math-from-string.min.js"></script>
 ```
 
-## Documentation
-
-See the [documentation](http://grafluxe.com/o/doc/math-from-string/global.html).
-
 ## Notes
 
 - This project is lightweight and dependency free.
@@ -61,11 +57,21 @@ mathfromString("5-3*2");
 
 mathfromString("-10+-2");
 // -12
+
+mathfromString("2**3");
+// 8
+
+mathfromString("(2+8)*2+(100.34-10+(2+5.4))");
+// 117.74000000000001
 ```
+
+See the [documentation](http://grafluxe.com/o/doc/math-from-string/global.html).
+
+See the [CHANGELOG](https://github.com/grafluxe/math-from-string/blob/master/CHANGELOG.md).
 
 ## License
 
-Copyright (c) 2014, 2017 Leandro Silva (http://grafluxe.com)
+Copyright (c) 2014, 2017-2018 Leandro Silva (http://grafluxe.com)
 
 Released under the MIT License.
 
